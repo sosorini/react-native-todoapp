@@ -13,13 +13,14 @@ import {
 import ToDo from "./ToDos/ToDo";
 import { AppLoading } from "expo";
 
-const { width, weight } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default class App extends React.Component {
   state = {
     newToDo: "",
     loadedToDos: false, // disk에서 로딩해왔는지
-    toDos: {}
+    toDos: {},
+    textInputValue: ""
   };
   componentDidMount = () => {
     this._loadToDos();
@@ -30,24 +31,31 @@ export default class App extends React.Component {
     const { newToDo, loadedToDos, toDos } = this.state;
     console.log(toDos);
     if (!loadedToDos) {
-      return <AppLoading>{/* <StatusBar barStyle="light-content" /> */}</AppLoading>;
+      return (
+        <AppLoading>
+          <StatusBar barStyle="light-content" />{" "}
+        </AppLoading>
+      );
     }
     // loadedToDos = true
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        {/* <Text style={styles.title}>Prography To Do</Text> */}
         <View style={styles.card}>
-          <TextInput
-            style={styles.input}
-            placeholder={"메모를 적어보세요"}
-            value={newToDo} // New To Do
-            onChangeText={this._controlNewToDo}
-            placeholderTextColor={"grey"}
-            autoCorrect={false}
-            onSubmitEditing={this._addToDo} // 클릭할때
-          />
-          <Button title="추가" onPress={this._addToDo} />
+          <View style={styles.textInputBox}>
+            <TextInput
+              style={styles.input}
+              placeholder={"메모를 적어보세요"}
+              value={newToDo} // New To Do
+              onChangeText={this._controlNewToDo}
+              placeholderTextColor={"grey"}
+              autoCorrect={false}
+              onSubmitEditing={this._addToDo} // 클릭할때
+            />
+            {/* <Button title="추가" onPress={this._addToDo} /> */}
+            <Text style={styles.clickText} onPress={this._addToDo}>
+              추가
+            </Text>
+          </View>
           <ScrollView contentContainerStyle={styles.toDos}>
             {/* array일때{toDos.map(todo => <ToDo />)} */}
             {/* {Object.values(toDos)} 하면 array가 생기니까 map() 돌릴 수 있다 */}
@@ -83,7 +91,9 @@ export default class App extends React.Component {
   };
   // local save
   _addToDo = () => {
+    // const { newToDo, textInputValue } = this.state;
     const { newToDo } = this.state;
+
     // ToDos들은 Object로 관리할 것이다- 삭제수정을 용이하게 하기 위해 Object
     // **새로운 todo를 추가하는 법**
     // 오브젝트 생성 + 오브젝트에 리스트로 추가(toDo) -> toDos를 변경하는 것이 아니다
@@ -181,23 +191,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f2f2f2",
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: "center"
   },
-  title: {
-    marginTop: 50,
-    marginBottom: 30,
-    fontSize: 30,
+  textInputBox: {
+    flexDirection: "row",
+    alignItems: "flex-start"
+  },
+  input: {
+    // Text Input
+    flex: 1,
+    fontSize: 20,
+    padding: 20,
+    backgroundColor: "#e7e1e1"
+  },
+  clickText: {
+    flex: 1 / 6,
+    backgroundColor: "#F32657",
     color: "white",
-    fontWeight: "200"
+    fontSize: 20,
+    padding: 20
   },
   card: {
     backgroundColor: "white",
     flex: 1,
     marginTop: 30,
     width: width - 30,
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
     ...Platform.select({
       ios: {
         shadowColor: "rgb(50, 50, 50)",
@@ -212,13 +230,6 @@ const styles = StyleSheet.create({
         elevation: 3
       }
     })
-  },
-  input: {
-    padding: 20,
-    borderBottomColor: "#bbb",
-    borderBottomWidth: 1, // StyleSheet.hairline
-    fontSize: 20,
-    backgroundColor: "#e7e1e1"
   },
   toDos: {
     alignItems: "center"

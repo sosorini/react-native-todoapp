@@ -117,8 +117,6 @@ export default class ToDo extends Component {
 const styles = StyleSheet.create({
   container: {
     width: width - 30,
-    fontSize: 20,
-
     backgroundColor: "#e4cdce",
     flexDirection: "row",
     alignItems: "center",

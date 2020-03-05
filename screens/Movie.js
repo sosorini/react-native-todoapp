@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Button, ActivityIndicator } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 class Movie extends Component {
   _isMounted = false; // memory leak
@@ -45,7 +46,11 @@ class Movie extends Component {
           </View>
         );
       });
-      return <View style={styles.container}>{titles}</View>;
+      return (
+        <View style={styles.container}>
+          <ScrollView>{titles}</ScrollView>
+        </View>
+      );
     }
   }
 }

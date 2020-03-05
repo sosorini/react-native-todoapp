@@ -16,7 +16,6 @@ class Home extends Component {
             <Text style={styles.text}>Movie</Text>
           </View>
         </TouchableOpacity>
-        <Button title="hi" />
       </View>
     );
   }
@@ -26,28 +25,25 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginTop: height / 4,
     alignItems: "center",
-    width: width - 50,
-    flex: 1,
     flexDirection: "column",
-    alignItems: "center"
+    marginHorizontal: 20
   },
   action: {
-    // marginVertical: 15,
-    // marginHorizontal: 15,
-    height: 50,
+    width: width - 100,
     margin: 5,
-    // padding: 5,
+    paddingTop: 15,
+    paddingBottom: 15,
     backgroundColor: "#F32657",
     borderRadius: 10,
+    alignItems: "center",
     justifyContent: "space-between"
   },
   text: {
     fontSize: 20,
     fontWeight: "400",
-    color: "white",
-    marginVertical: 10,
-    marginHorizontal: 100
+    color: "white"
   }
 });
