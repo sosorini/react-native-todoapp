@@ -22,11 +22,10 @@ export default class ToDo extends Component {
 
   render() {
     const { isEditing, toDoValue } = this.state;
-    const { text, id, deleteToDo, isCompleted, updateToDo } = this.props; // props에서 text 받아오자
+    const { text, id, deleteToDo, isCompleted, uncompleteToDo, completeToDo } = this.props; // props에서 text 받아오자
     return (
       <View style={styles.container}>
         <View style={styles.column}>
-          {/* <TouchableOpacity onPress={this._toggleComplete}> */}
           {isEditing ? (
             // <TouchableOpacity>
             <TextInput
@@ -39,10 +38,10 @@ export default class ToDo extends Component {
               multiline={true}
               onChangeText={this._controlInput}
               returnKeyType={"done"}
-              onBlur={this._finishEditing} // blur 편집종료
+              onBlur={this._finishEditing} // blur될때도 편집완료되게
+              autoCorrect={false}
             />
           ) : (
-            // </TouchableOpacity>
             // not edit
             <Text
               onPress={this._toggleComplete}
@@ -59,7 +58,7 @@ export default class ToDo extends Component {
             <View style={styles.actions}>
               <TouchableOpacity onPressOut={this._finishEditing}>
                 <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>완료</Text>
+                  <Text style={styles.actionText}>Done</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -67,12 +66,17 @@ export default class ToDo extends Component {
             <View style={styles.actions}>
               <TouchableOpacity onPressOut={this._startEditing}>
                 <View style={styles.actionContainer}>
-                  <Text style={styles.actionText2}>수정</Text>
+                  <Text style={styles.actionText2}>Edit</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPressOut={event => deleteToDo(id)}>
+              <TouchableOpacity
+                onPressOut={event => {
+                  event.stopPropagation;
+                  deleteToDo(id);
+                }}
+              >
                 <View style={styles.actionContainer}>
-                  <Text style={styles.actionText3}>삭제</Text>
+                  <Text style={styles.actionText3}>Del</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -83,7 +87,9 @@ export default class ToDo extends Component {
   }
 
   // onPress - Text
-  _toggleComplete = () => {
+  _toggleComplete = event => {
+    // 이벤트에 영향받지 않게 설정
+    event.stopPropagation;
     const { isCompleted, completeToDo, uncompleteToDo, id } = this.props;
     if (isCompleted) {
       uncompleteToDo(id);
@@ -92,13 +98,15 @@ export default class ToDo extends Component {
     }
   };
   // onPressOut - TouchableOpacity
-  _startEditing = () => {
+  _startEditing = event => {
+    event.stopPropagation;
     const { text } = this.props;
     this.setState({
       isEditing: true
     });
   };
-  _finishEditing = () => {
+  _finishEditing = event => {
+    event.stopPropagation;
     const { id, updateToDo } = this.props; // 여기서 사용하려면 props에서 받아오는거
     const { toDoValue } = this.state;
     updateToDo(id, toDoValue); // func 인자가 2개였다

@@ -19,8 +19,7 @@ export default class App extends React.Component {
   state = {
     newToDo: "",
     loadedToDos: false, // disk에서 로딩해왔는지
-    toDos: {},
-    textInputValue: ""
+    toDos: {}
   };
   componentDidMount = () => {
     this._loadToDos();
@@ -44,16 +43,17 @@ export default class App extends React.Component {
           <View style={styles.textInputBox}>
             <TextInput
               style={styles.input}
-              placeholder={"메모를 적어보세요"}
+              placeholder={"What To Do"}
               value={newToDo} // New To Do
               onChangeText={this._controlNewToDo}
               placeholderTextColor={"grey"}
               autoCorrect={false}
               onSubmitEditing={this._addToDo} // 클릭할때
+              blurOnSubmit={true}
+              underlineColorAndroid="transparent"
             />
-            {/* <Button title="추가" onPress={this._addToDo} /> */}
             <Text style={styles.clickText} onPress={this._addToDo}>
-              추가
+              ADD
             </Text>
           </View>
           <ScrollView contentContainerStyle={styles.toDos}>
@@ -199,9 +199,9 @@ const styles = StyleSheet.create({
   },
   input: {
     // Text Input
-    flex: 1,
+    flex: 5 / 6,
     fontSize: 20,
-    padding: 20,
+    padding: 10,
     backgroundColor: "#e7e1e1"
   },
   clickText: {
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F32657",
     color: "white",
     fontSize: 20,
-    padding: 20
+    padding: 10
   },
   card: {
     backgroundColor: "white",
